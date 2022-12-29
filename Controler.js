@@ -3,20 +3,24 @@ const MonoAPI = require('./MonoAPI');
 
 class Controler {
     _data;
+    #monoAPI;
+    constructor()
+    {
+        this.#monoAPI = new MonoAPI();
+    }
     async updateExchangeRates()
     {
-        this._data = await MonoAPI.getDataFromAPI();
+        this._data = await this.#monoAPI.getDataFromAPI();
     }
-
+    //Проверка тикера валюты
     checkTiket(tiker)
     {
         this._tiker = tiker;
         let currencyNumber = currencyCodes.code(tiker);
-        if(currencyCodes.code(tiker))
+        //Код гривны 980, не может быть базвовой валютой
+        if(currencyNumber && currencyNumber.number != 980)
         {
             currencyNumber = currencyNumber.number;
-            console.log('Controler tiker');
-            console.log(currencyNumber);
             return currencyNumber;
         }
         else {
@@ -24,7 +28,7 @@ class Controler {
             return 0;
         }
     }
-
+    //Формирование сообщение ответ, пользователю
     async returnMSG(tiker)
     {
         let msg = ''; 

@@ -2,14 +2,21 @@ const axsios = require('axios');
 
 class MonoAPI
 {
-    static async getDataFromAPI()
+    #data;
+    #time;
+    async #setDataFromAPI()
     {
-        return await axsios.get('https://api.monobank.ua/bank/currency');
-        // .then(res => 
-        // {
-        //     console.log(res.data[0]);
-        //     return res;
-        // });
+        this.#time = new Date();
+        console.log(this.#time);
+        this.#data = await axsios.get('https://api.monobank.ua/bank/currency');
+    }
+    //Геттер данных с Моно, Инфа в Моно обновляется раз в 5 мин
+    async getDataFromAPI()
+    {
+        let firstCondition = typeof this.#time === 'undefined';
+        if(firstCondition || (new Date().valueOf() - this.#time.valueOf()) > 300000)
+            await this.#setDataFromAPI();
+        return await this.#data;
     }
 }
 
