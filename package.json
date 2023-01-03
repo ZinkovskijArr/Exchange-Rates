@@ -11,6 +11,8 @@
   "description": "",
   "dependencies": {
     "axios": "^1.2.1",
-    "currency-codes": "^2.1.0"
+    "currency-codes": "^2.1.0",
+    "mysql2": "^2.3.3",
+    "node-telegram-bot-api": "^0.60.0"
   }
 }
