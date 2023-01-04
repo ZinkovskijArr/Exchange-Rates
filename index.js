@@ -17,6 +17,9 @@ bot.on("message", async msg => {
 
   if (msg.text == '/start') {
     await bot.sendMessage(msg.chat.id, _menuText, Button.mainMenuBtn);
+    await controler.connection();
+    //await controler.insertInBD(msg.from.id,msg.from.first_name,msg.from.username);
+    await controler.checkDataInBD({id: msg.from.id, first_name: msg.from.first_name,username: msg.from.username});
   }
   //true если это такер валюты
   else if (selectedCurrency != -1 && !parseNam) {
