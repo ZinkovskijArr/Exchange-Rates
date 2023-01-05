@@ -1,15 +1,15 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 
-const sequelize = new Sequelize('TG_Bot', 'root', '', {
+const sequelize = new Sequelize('TG_Bot', 'postgres', 'root', {
     host: 'localhost',
-    dialect: "mysql"
+    dialect: "postgres"
 });
 
 //Модель таблици User
 const User = sequelize.define('Users', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true
     },
     first_name: {
@@ -21,28 +21,27 @@ const User = sequelize.define('Users', {
 },
     {
         timestamps: false
-});
+    });
 
 
 async function insert(user) {
     try {
-        const data = await User.create({ id: user.id, first_name: user.first_name, username : user.username });
+        const data = await User.create({ id: user.id, first_name: user.first_name, username: user.username });
     } catch (error) {
         console.error(error);
     }
-    //await sequelize.close()
 }
-
-async function select() {
+//возращает только id клиента
+async function selectID() {
     try {
-        const data = await User.findAll();
-        //console.log(JSON.stringify(data));
+        const data = await User.findAll({
+            attributes: ['id'],
+          },{raw:true});
         return data;
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
-    //await sequelize.close()
 }
 
 
-module.exports = {insert, select, sequelize};
+module.exports = { insert, selectID, sequelize };

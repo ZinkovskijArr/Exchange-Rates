@@ -1,6 +1,6 @@
 const currencyCodes = require('currency-codes');// Код валюты в стандарте  ISO 4217
 const MonoAPI = require('../Model/MonoAPI');
-const { insert, select, sequelize } = require('../Model/bd');
+const { insert, selectID, sequelize } = require('../Model/bd');
 
 class Controler {
     _data;
@@ -29,8 +29,6 @@ class Controler {
     async returnMSG(tiker) {
         let msg = '';
         let chankOfAPI = await this.getChankOfAPIData(tiker);
-        console.log("Dsfdfdsgfdgmdfklmgdf.kgdf");
-        console.log(chankOfAPI);
         if (typeof chankOfAPI === 'string')
             return chankOfAPI;
         else if (chankOfAPI) {
@@ -78,7 +76,7 @@ class Controler {
         result = `We'll ${opion} ${tiker} for ${result} UAH`;
         return result;
     }
-
+    //проверка соединения 
     async connection() {
         try {
             await sequelize.authenticate();
@@ -90,9 +88,9 @@ class Controler {
     }
 
     async checkDataInBD(user) {
-        let data = await select();
+        let data = await selectID();
         for (let i = 0; i < data.length; i++) {
-            if (user.id === data[i].id) return 0;
+            if (user.id == data[i].dataValues.id) return 0;
         }
         await insert(user);
     }
